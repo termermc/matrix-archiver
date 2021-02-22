@@ -1,0 +1,162 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= room.name %> (<%= room.id %>)</title>
+
+    <style>
+        body {
+            background: rgb(32, 32, 32);
+            color: rgb(240, 240, 240);
+            font-family: sans-serif;
+        }
+
+        #info {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+        }
+        #info-title {
+            font-size: 40px;
+        }
+        #info-id {
+            font-style: italic;
+            color: rgb(155, 155, 155);
+        }
+
+        #members {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+        }
+        #messages {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+        }
+
+        .member-listing {
+            background: rgba(0, 0, 0, 0.3);
+            display: inline-block;
+            margin-bottom: 5px;
+            height: 30px;
+            padding-right: 5px;
+        }
+        .member-listing-avatar {
+            width: 30px;
+            height: 30px;
+        }
+        .member-listing-username {
+            position: relative;
+            bottom: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: default;
+        }
+
+        .message {
+            background: rgba(0, 0, 0, 0.3);
+            display: inline-block;
+            margin-bottom: 10px;
+            padding-right: 5px;
+            padding: 10px;
+        }
+        .message-author {
+            font-size: 14px;
+            cursor: default;
+            display: inline-block;
+        }
+        .message-author-avatar {
+            width: 25px;
+            height: 25px;
+            position: relative;
+            top: 8px;
+        }
+        .message-author-username {
+            margin-left: 5px;
+            margin-right: 3px;
+        }
+        .message-timestamp {
+            display: inline-block;
+            font-size: 10px;
+            font-style: italic;
+        }
+        .message-content-text {
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+        .message-file-info {
+            font-style: italic;
+            color: rgb(155, 155, 155);
+            font-size: 10px;
+        }
+        .message-content-file {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+        }
+
+        img, video {
+            max-width: calc(100vw - 60px);
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h1 id="info-title"><%= room.name %></h1>
+        <p id="info-id" class="id"><%= room.id %></p>
+    </div>
+    <div id="members">
+        <% for(member of members) { %>
+            <div class="member-listing">
+                <img class="member-listing-avatar" src="media/<%= mediaUrlToFilename(member.avatarUrl) %>" alt="<%= member.displayName %>'s avatar">
+                <span class="member-listing-username" title="<%= member.userId %>"><%= member.displayName %></span>
+            </div>
+            <br>
+        <% } %>
+    </div>
+    <br>
+    <div id="messages">
+        <% for(var number = 0; number < messages.length; number++) {
+            var message = messages[number]
+        %>
+            <div class="message">
+                <div class="message-top">
+                    <div class="message-author">
+                        <img class="message-author-avatar" src="media/<%= mediaUrlToFilename(message.avatarUrl) %>" alt="<%= message.displayName %>'s avatar">
+                        <span class="message-author-username" title="<%= message.userId %>"><%= message.displayName %></span>
+                    </div>
+                    <div class="message-timestamp"><%= formatTimestamp(message.timestamp) %></div>
+                </div>
+                <br>
+                <div class="message-content">
+                    <% if(message.type == 'm.image') { %>
+                        <div class="message-content-image">
+                            <img src="media/<%= mediaUrlToFilename(message.url) %>" alt="<%= mediaUrlToFilename(message.url) %>" class="message-image">
+                            <br>
+                            <p class="message-file-info"><%= message.size %> bytes, <%= message.mime %></p>
+                        </div>
+                    <% } else if(message.type == 'm.video') { %>
+                        <div class="message-content-video">
+                            <video src="media/<%= mediaUrlToFilename(message.url) %>" alt="<%= mediaUrlToFilename(message.url) %>" class="message-video" controls><%= mediaUrlToFilename(message.url) %></video>
+                            <br>
+                            <p class="message-file-info"><%= message.size %> bytes, <%= message.mime %></p>
+                        </div>
+                    <% } else if(message.type == 'm.audio') { %>
+                        <div class="message-content-audio">
+                            <audio src="media/<%= mediaUrlToFilename(message.url) %>" alt="<%= mediaUrlToFilename(message.url) %>" class="message-audio" controls><%= mediaUrlToFilename(message.url) %></audio>
+                            <br>
+                            <p class="message-file-info"><%= message.size %> bytes, <%= message.mime %></p>
+                        </div>
+                    <% } else if(message.type == 'm.file') { %>
+                        <div class="message-content-file">
+                            <a href="media/<%= mediaUrlToFilename(message.url) %>">Download <%= mediaUrlToFilename(message.url) %></a>
+                            <p class="message-file-info"><%= message.size %> bytes</p>
+                        </div>
+                    <% } else { %>
+                        <div class="message-content-text"><%= message.body %></div>
+                    <% } %>
+                </div>
+            </div>
+            <br>
+        <% } %>
+    </div>
+</body>
+</html>

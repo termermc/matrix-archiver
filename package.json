@@ -1,0 +1,13 @@
+{
+  "name": "matrix-archiver",
+  "version": "1.0.0",
+  "description": "Chat history and media archiver for Matrix",
+  "main": "index.js",
+  "author": "Termer",
+  "license": "MIT",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "matrix-js-sdk": "^9.0.1",
+    "mime-types": "^2.1.27"
+  }
+}
