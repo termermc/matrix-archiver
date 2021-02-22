@@ -16,6 +16,8 @@ This tool has the following limitations:
  - Cannot save widgets (like Jitsi)
 
 # What You Need
+First, download the tool. Either clone this repository, or download a [zip](https://github.com/termermc/matrix-archiver/archive/main.zip).
+
 To run, you need NodeJS and NPM (or Yarn). To download media, you need `wget` to be installed and in your path.
 
 If you're running Linux or Mac, wget will probably already be installed. For Windows, it might be installed, but if it's not, you can install it via MinGW or with Chocolatey.
